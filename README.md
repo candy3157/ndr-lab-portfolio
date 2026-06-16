@@ -1,40 +1,31 @@
 # NDR Lab Portfolio
 
-Real-time network detection lab for scan behavior in a segmented VM environment.
+분리된 VM 환경에서 스캔 행위를 실시간으로 탐지하기 위한 네트워크 탐지 실습 프로젝트입니다.
 
-The project captures router traffic in chunks, converts packets to Zeek flow
-logs, builds low-and-slow scan features, runs XGBoost and GRU inference, and
-streams detection events to a lightweight dashboard.
+이 프로젝트는 라우터 트래픽을 일정 단위로 캡처하고, 패킷을 Zeek flow 로그로 변환한 뒤, low-and-slow 스캔 탐지를 위한 특징을 생성합니다. 이후 XGBoost와 GRU 모델 추론을 수행하고, 탐지 이벤트를 경량 대시보드로 실시간 스트리밍합니다.
 
-## What Is Included
+## 포함된 내용
 
-- `model/`: final model training, evaluation, feature engineering, and inference
-  code from the research workspace.
-- `runtime/`: VM runtime bundle for router capture, Zeek conversion, model
-  inference, ensemble scoring, and dashboard event delivery.
-- `dashboard/`: lightweight NDR dashboard with SQLite storage and server-sent
-  updates.
-- `lab-services/`: demo App/DB server and Ubuntu workload client used to create
-  benign baseline traffic.
-- `reports/`: selected model evaluation summaries suitable for portfolio review.
+* `model/`: 연구 작업 공간에서 사용한 최종 모델 학습, 평가, 특징 엔지니어링, 추론 코드
+* `runtime/`: 라우터 트래픽 캡처, Zeek 변환, 모델 추론, 앙상블 점수 계산, 대시보드 이벤트 전달을 위한 VM 런타임 번들
+* `dashboard/`: SQLite 저장소와 Server-Sent Events 기반 실시간 업데이트를 지원하는 경량 NDR 대시보드
+* `lab-services/`: 정상 트래픽 기준선을 생성하기 위한 데모 App/DB 서버 및 Ubuntu workload client
+* `reports/`: 포트폴리오 검토에 적합한 주요 모델 평가 요약 자료
 
-## What Is Not Included
+## 포함되지 않은 내용
 
-The repository intentionally excludes raw datasets, packet captures, generated
-SQLite databases, malware/binary samples, trained model artifacts, and local
-runtime logs.
+이 저장소는 원시 데이터셋, 패킷 캡처 파일, 생성된 SQLite 데이터베이스, 악성코드/바이너리 샘플, 학습된 모델 아티팩트, 로컬 런타임 로그를 의도적으로 제외합니다.
 
-Excluded examples:
+제외 예시는 다음과 같습니다.
 
-- `data/`, `datasets/`
-- `*.pcap`, `*.sqlite3`, `*.exe`, archives
-- `*.pt`, `*.joblib`
-- real `config.json`, `.env`, local logs
+* `data/`, `datasets/`
+* `*.pcap`, `*.sqlite3`, `*.exe`, 압축 파일
+* `*.pt`, `*.joblib`
+* 실제 `config.json`, `.env`, 로컬 로그
 
-Trained artifacts can be attached separately through GitHub Releases, Git LFS,
-or a private artifact store. See `runtime/models/README.md`.
+학습된 아티팩트는 GitHub Releases, Git LFS 또는 개인 아티팩트 저장소를 통해 별도로 첨부할 수 있습니다. 자세한 내용은 `runtime/models/README.md`를 참고하세요.
 
-## Architecture
+## 아키텍처
 
 ```text
 Ubuntu workload client
@@ -54,9 +45,9 @@ pfSense router
   -> Dashboard API
 ```
 
-## Runtime Demo Flow
+## 런타임 데모 흐름
 
-Start the dashboard:
+대시보드를 실행합니다.
 
 ```bash
 cd dashboard
@@ -64,7 +55,7 @@ cp config.example.json config.json
 python3 -m dashboard_server.app -c config.json
 ```
 
-Start the normal workload client on the client VM:
+클라이언트 VM에서 정상 workload client를 실행합니다.
 
 ```bash
 cd lab-services/ubuntu-workload-client
@@ -73,8 +64,7 @@ cp config.example.json config.json
 ubuntu-workload-client -c config.json loop
 ```
 
-Run the real-time monitor pipeline after placing trained artifacts under
-`runtime/models/`:
+학습된 아티팩트를 `runtime/models/` 아래에 배치한 뒤, 실시간 모니터링 파이프라인을 실행합니다.
 
 ```bash
 cd runtime
@@ -91,23 +81,21 @@ cd runtime
   --include-raw
 ```
 
-## Model Summary
+## 모델 요약
 
-The final runtime path uses:
+최종 런타임 경로는 다음 구조를 사용합니다.
 
-- XGBoost for fast window-level fallback detection.
-- GRU sequence inference once enough history exists.
-- Ensemble scoring to combine XGBoost and GRU outputs.
-- Dashboard event conversion with dynamic source IP handling.
+* XGBoost를 사용하여 빠른 window-level fallback 탐지를 수행합니다.
+* 충분한 이력 데이터가 확보되면 GRU 기반 시퀀스 추론을 수행합니다.
+* 앙상블 점수 계산을 통해 XGBoost와 GRU의 출력을 결합합니다.
+* 동적 출발지 IP 처리 기능을 포함하여 탐지 결과를 대시보드 이벤트로 변환합니다.
 
-Selected evaluation summaries are in `reports/`, especially:
+주요 평가 요약 자료는 `reports/` 디렉터리에 있으며, 특히 다음 파일을 참고할 수 있습니다.
 
-- `reports/combined_10_model_comparison.md`
-- `reports/xgboost_metrics_combined_10_ndr.md`
-- `reports/low_slow_feature_evaluation_report.md`
+* `reports/combined_10_model_comparison.md`
+* `reports/xgboost_metrics_combined_10_ndr.md`
+* `reports/low_slow_feature_evaluation_report.md`
 
-## Repository Status
+## 저장소 상태
 
-This is a portfolio/public-code version of the project. It is structured to
-show implementation quality and reproducible runtime flow without publishing raw
-traffic data or trained artifacts directly in the repository.
+이 저장소는 프로젝트의 포트폴리오 및 공개 코드 버전입니다. 원시 트래픽 데이터나 학습된 아티팩트를 저장소에 직접 공개하지 않으면서도, 구현 품질과 재현 가능한 런타임 흐름을 보여줄 수 있도록 구성되어 있습니다.
