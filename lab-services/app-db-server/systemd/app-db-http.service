@@ -1,0 +1,14 @@
+[Unit]
+Description=NDR lab App/DB HTTP server
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/app-db-server
+ExecStart=/usr/bin/python3 -m app_db_server.app -c /opt/app-db-server/config.json
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

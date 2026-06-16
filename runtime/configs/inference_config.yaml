@@ -1,0 +1,25 @@
+feature_schema_version: ndr_common_low_slow_v2
+thresholds:
+  xgboost: 0.5
+  gru: 0.5
+  ensemble: 0.5
+ensemble:
+  method: xgboost_primary_gru_shadow
+  policy_config: configs/ensemble_policy_low_slow_v2.json
+  gru_review_gate_enabled: true
+  gate_config: configs/gru_review_gate_low_slow_v1.json
+  automatic_or_ensemble_enabled: false
+  automatic_weighted_average_enabled: false
+  gru_shadow_triage_enabled: true
+  xgboost_weight: 0.7
+  gru_weight: 0.3
+weighted_average:
+  enabled_for_integration_testing: true
+  production_default: false
+outputs:
+  xgboost_predictions: data/predictions/xgboost_predictions.json
+  gru_predictions: data/predictions/gru_predictions.json
+  ensemble_predictions: reports/inference_sample_output.json
+  policy_ensemble_predictions: reports/policy_ensemble_output.json
+  gated_policy_ensemble_predictions: reports/policy_ensemble_output_gated_ctu13_finetuned_simulation_real_only_24h.json
+  simulation_real_only_24h_ensemble: reports/inference_sample_output_simulation_real_only_24h.json

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NDR Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">NDR Monitor</p>
+          <h1>Network Detection Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <span id="streamState" class="stream-state offline">Disconnected</span>
+          <button id="refreshButton" class="icon-button" type="button" title="Refresh snapshot" aria-label="Refresh snapshot">R</button>
+          <button id="pauseButton" class="icon-button" type="button" title="Pause live updates" aria-label="Pause live updates">P</button>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <section id="statusPanel" class="status-panel normal">
+          <div class="status-copy">
+            <p class="section-label">Current Status</p>
+            <h2 id="currentStatus">Normal</h2>
+            <p id="statusSummary">Waiting for sensor events.</p>
+          </div>
+          <div class="status-meta">
+            <div>
+              <span>Score</span>
+              <strong id="statusScore">0.00</strong>
+            </div>
+            <div>
+              <span>Last Seen</span>
+              <strong id="lastSeen">-</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="metric-grid" aria-label="Evidence metrics">
+          <article class="metric-tile">
+            <span>Flow Count</span>
+            <strong id="flowCount">0</strong>
+          </article>
+          <article class="metric-tile">
+            <span>Unique Dest IPs</span>
+            <strong id="uniqueDstIps">0</strong>
+          </article>
+          <article class="metric-tile">
+            <span>Unique Dest Ports</span>
+            <strong id="uniqueDstPorts">0</strong>
+          </article>
+          <article class="metric-tile">
+            <span>SYN Count</span>
+            <strong id="synCount">0</strong>
+          </article>
+          <article class="metric-tile">
+            <span>Failed Ratio</span>
+            <strong id="failedRatio">0%</strong>
+          </article>
+          <article class="metric-tile">
+            <span>Top Ports</span>
+            <strong id="topPorts">-</strong>
+          </article>
+        </section>
+
+        <section class="details-panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-label">Detection Focus</p>
+              <h3>Latest Source</h3>
+            </div>
+          </div>
+          <dl class="focus-list">
+            <div>
+              <dt>Source IP</dt>
+              <dd id="sourceIp">-</dd>
+            </div>
+            <div>
+              <dt>Target Network</dt>
+              <dd id="targetNetwork">-</dd>
+            </div>
+            <div>
+              <dt>Target IPs</dt>
+              <dd id="targetIps">-</dd>
+            </div>
+            <div>
+              <dt>Sensor</dt>
+              <dd id="sensorId">-</dd>
+            </div>
+            <div>
+              <dt>Recent Events</dt>
+              <dd id="eventCount">0</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="timeline-panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-label">Timeline</p>
+              <h3>Recent State Changes</h3>
+            </div>
+          </div>
+          <ol id="timeline" class="timeline"></ol>
+        </section>
+
+        <section class="table-panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-label">Events</p>
+              <h3>Recent Detection Results</h3>
+            </div>
+            <span id="lastUpdated" class="muted">-</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Received</th>
+                  <th>Status</th>
+                  <th>Score</th>
+                  <th>Source</th>
+                  <th>Target</th>
+                  <th>Target IPs</th>
+                  <th>Flows</th>
+                  <th>Dst IPs</th>
+                  <th>Dst Ports</th>
+                </tr>
+              </thead>
+              <tbody id="eventsTable"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

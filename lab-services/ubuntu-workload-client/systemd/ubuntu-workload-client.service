@@ -1,0 +1,16 @@
+[Unit]
+Description=NDR lab Ubuntu workload client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ubuntu-workload-client
+ExecStart=/opt/ubuntu-workload-client/.venv/bin/ubuntu-workload-client -c /opt/ubuntu-workload-client/config.json loop
+Restart=always
+RestartSec=5
+User=ubuntu
+Group=ubuntu
+
+[Install]
+WantedBy=multi-user.target

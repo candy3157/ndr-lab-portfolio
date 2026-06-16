@@ -1,0 +1,12 @@
+[project]
+name = "ubuntu-workload-client"
+version = "0.1.0"
+description = "Lightweight normal-traffic generator for an Ubuntu client VM in an NDR demo lab."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+ubuntu-workload-client = "traffic_client.main:main"
+
+[tool.setuptools]
+packages = ["traffic_client"]

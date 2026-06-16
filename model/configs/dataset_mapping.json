@@ -1,0 +1,42 @@
+{
+  "CSE-CIC-IDS2018": {
+    "feature_mapping": {
+      "avg_dst_bytes": "TotLen Bwd Pkts",
+      "avg_duration": "Flow Duration / 1_000_000",
+      "avg_src_bytes": "TotLen Fwd Pkts",
+      "bytes_per_second": "Flow Byts/s",
+      "packet_count_mean": "Tot Fwd Pkts + Tot Bwd Pkts",
+      "packets_per_second": "Flow Pkts/s",
+      "port range ratios": "Dst Port bucketed into well-known/registered/ephemeral",
+      "protocol ratios": "Protocol"
+    },
+    "label_column_candidates": [
+      "Label"
+    ],
+    "raw_identifier_columns_excluded": [
+      "Flow ID",
+      "Src IP",
+      "Dst IP",
+      "Src Port",
+      "Dst Port"
+    ],
+    "time_column_candidates": [
+      "Timestamp"
+    ]
+  },
+  "UQ-IoT-IDS2021": {
+    "feature_mapping": "Use Zeek/window behavior features matching ndr_common_v1.",
+    "label_basis": "benign_samples vs attack_samples path",
+    "required_preprocessing": "Extract Zeek conn.log or flow CSV from PCAP before schema conversion.",
+    "source_format": "PCAP zip"
+  },
+  "simulation": {
+    "feature_mapping": "Existing Zeek/window behavior columns are reused directly when names match.",
+    "label_column_candidates": [
+      "label",
+      "type",
+      "target",
+      "scan_subtype"
+    ]
+  }
+}

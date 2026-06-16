@@ -1,0 +1,9 @@
+[project]
+name = "ndr-dashboard"
+version = "0.1.0"
+description = "Lightweight NDR detection dashboard for a VM lab."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+ndr-dashboard = "dashboard_server.app:main"

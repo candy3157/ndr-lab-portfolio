@@ -1,0 +1,39 @@
+{
+  "gate_name": "low_slow_volume_gate_v1",
+  "enabled": true,
+  "intended_use": "Allow CTU-pretrained GRU review only for low-volume repeated behavior where XGBoost low-slow v2 is weak.",
+  "mode": "all",
+  "conditions": [
+    {
+      "feature": "rolling_12_flow_count_mean",
+      "operator": "<=",
+      "value": 4.0,
+      "reason": "12-window traffic volume is low enough to match low-and-slow behavior."
+    },
+    {
+      "feature": "rolling_12_failed_flow_ratio_weighted",
+      "operator": "<=",
+      "value": 0.35,
+      "reason": "12-window failure ratio is below scan-burst behavior."
+    },
+    {
+      "feature": "rolling_60_flow_count_mean",
+      "operator": "<=",
+      "value": 4.0,
+      "reason": "60-window traffic volume remains low."
+    },
+    {
+      "feature": "rolling_60_failed_flow_ratio_weighted",
+      "operator": "<=",
+      "value": 0.35,
+      "reason": "60-window failure ratio remains below noisy scan behavior."
+    }
+  ],
+  "blocked_review_reason": "gru_review_suppressed_by_low_slow_gate",
+  "allowed_review_reason": "gru_review_allowed_low_slow_gate",
+  "notes": [
+    "The gate does not use scenario_id, attack_type, label, src_ip, or dst_ip.",
+    "Thresholds were derived from validation analysis of CTU-pretrained GRU review rows and must be recalibrated with more real captures.",
+    "The gate is designed to preserve low-and-slow review signals while suppressing scan-burst false review signals."
+  ]
+}

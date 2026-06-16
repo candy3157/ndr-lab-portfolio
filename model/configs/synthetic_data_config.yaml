@@ -1,0 +1,16 @@
+target_total: 32000
+min_per_label: 500
+balance_labels: true
+seed: 42
+window_seconds: 10
+synthetic_runs_per_label: 8
+jitter_ratio: 0.12
+respect_observed_ranges: true
+synthetic_run_prefix: synthetic-common
+synthetic_scenario_prefix: synthetic-common
+default_attack_technique_id: T1046
+attack_profiles:
+  - low_and_slow_scan
+  - horizontal_scan
+  - vertical_scan
+  - service_probe

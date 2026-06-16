@@ -1,0 +1,87 @@
+{
+  "policy_name": "xgboost_primary_gru_sequence_challenger",
+  "policy_version": "xgboost-primary-gru-shadow-v1",
+  "status": "shadow_triage_default",
+  "feature_schema_version": "ndr_common_low_slow_v2",
+  "primary_model": {
+    "model_name": "xgboost_low_slow_v2",
+    "role": "operating_candidate",
+    "model_path": "models/xgboost_model_low_slow_v2.joblib",
+    "preprocessor_path": "models/xgboost_preprocessor_low_slow_v2.joblib",
+    "feature_list_path": "models/xgboost_feature_list_low_slow_v2.json"
+  },
+  "challenger_model": {
+    "model_name": "gru_sequence",
+    "role": "sequence_challenger",
+    "model_path": "models/gru_model_simulation_real_only_24h.pt",
+    "scaler_path": "models/gru_scaler_simulation_real_only_24h.joblib",
+    "feature_list_path": "models/gru_feature_list_simulation_real_only_24h.json"
+  },
+  "experimental_challenger_models": [
+    {
+      "model_name": "gru_ctu13_full_to_simulation_finetuned",
+      "role": "gated_sequence_challenger",
+      "enabled_by_default": true,
+      "model_path": "models/gru_model_ctu13_full_to_simulation_finetuned.pt",
+      "scaler_path": "models/gru_scaler_ctu13_full_to_simulation_finetuned.joblib",
+      "feature_list_path": "models/gru_feature_list_ctu13_full_to_simulation_finetuned.json",
+      "impact_report": "reports/ctu13_pretraining_impact_report.md",
+      "gate_config": "configs/gru_review_gate_low_slow_v1.json",
+      "reason": "Improves time-blocked low-and-slow recall at threshold 0.50. Enabled only behind low_slow_volume_gate_v1, which removes scan-burst normal review signals in current validation."
+    }
+  ],
+  "gru_review_gate": {
+    "enabled": true,
+    "gate_config": "configs/gru_review_gate_low_slow_v1.json",
+    "impact_report": "reports/gated_gru_review_policy_report.md",
+    "default_behavior": "GRU review is allowed only when XGBoost predicts normal, GRU predicts attack, and the low-slow feature gate passes.",
+    "validation_summary": {
+      "time_blocked_low_and_slow_true_reviews_preserved": 450,
+      "time_blocked_normal_reviews_before_gate": 343,
+      "time_blocked_normal_reviews_after_gate": 0,
+      "time_blocked_promoted_policy_f1_after_gate": 0.9961
+    }
+  },
+  "thresholds": {
+    "xgboost_low_slow_v2": 0.5,
+    "gru_sequence_challenger": 0.5,
+    "weighted_average": 0.5
+  },
+  "validation_threshold_references": {
+    "xgboost_low_slow_v2": {
+      "run_blocked": 0.95,
+      "scenario_time_blocked": 0.35,
+      "time_blocked": 0.94
+    },
+    "gru_sequence_challenger": {
+      "run_blocked": 0.95,
+      "scenario_time_blocked": 0.95,
+      "time_blocked": 0.5
+    }
+  },
+  "operating_policy": {
+    "default_decision_rule": "xgboost_primary",
+    "automatic_or_ensemble_enabled": false,
+    "automatic_weighted_average_enabled": false,
+    "gru_shadow_triage_enabled": true,
+    "gru_review_gate_enabled": true,
+    "review_required_when": "GRU predicts attack while XGBoost predicts normal and low_slow_volume_gate_v1 passes",
+    "reason": "Naive OR ensemble damaged precision on run_blocked and scenario_time_blocked splits. CTU-pretrained GRU plus low_slow_volume_gate_v1 preserves low-and-slow review gains while suppressing scan-burst normal reviews in current validation."
+  },
+  "weighted_average": {
+    "enabled_for_integration_testing": true,
+    "xgboost_weight": 0.7,
+    "gru_weight": 0.3,
+    "production_default": false
+  },
+  "reports": {
+    "cross_analysis": "reports/gru_xgb_cross_analysis_report.md",
+    "cross_analysis_json": "reports/gru_xgb_cross_analysis_report.json",
+    "aligned_predictions": "reports/gru_xgb_aligned_predictions.csv"
+  },
+  "limitations": [
+    "GRU sequence predictions are not equivalent to final-window labels.",
+    "GRU-only attack disagreements should be treated as review/triage signals until more real validation data is collected.",
+    "Public dataset performance remains cross-domain reference and must not be merged into simulation operating claims."
+  ]
+}

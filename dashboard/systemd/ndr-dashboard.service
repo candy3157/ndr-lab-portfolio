@@ -1,0 +1,16 @@
+[Unit]
+Description=NDR dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ndr-dashboard
+ExecStart=/usr/bin/python3 -m dashboard_server.app -c /opt/ndr-dashboard/config.json
+Restart=always
+RestartSec=5
+User=ubuntu
+Group=ubuntu
+
+[Install]
+WantedBy=multi-user.target

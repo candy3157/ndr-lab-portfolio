@@ -1,0 +1,24 @@
+{
+  "host": "0.0.0.0",
+  "port": 8000,
+  "database_path": "data/dashboard.sqlite3",
+  "static_dir": "static",
+  "status_policy": {
+    "hold_seconds": 30,
+    "scanning_score_threshold": 0.85,
+    "warning_score_threshold": 0.55
+  },
+  "display": {
+    "recent_event_limit": 80
+  },
+  "alerts": {
+    "enabled": false,
+    "provider": "telegram",
+    "cooldown_seconds": 300,
+    "timeout_seconds": 5,
+    "telegram": {
+      "bot_token": "env:TELEGRAM_BOT_TOKEN",
+      "chat_id": "env:TELEGRAM_CHAT_ID"
+    }
+  }
+}

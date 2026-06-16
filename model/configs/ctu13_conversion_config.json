@@ -1,0 +1,49 @@
+{
+  "dataset_name": "CTU-13",
+  "input_root": "data/CTU-13/CTU-13-Dataset",
+  "source_files": "*/*.binetflow",
+  "window_seconds": 10,
+  "background_policy": "exclude",
+  "smoke_max_rows_per_file": 200000,
+  "full_max_rows_per_file": 0,
+  "grouping": {
+    "session_id": "CTU-13:<scenario_id>:<SrcAddr>",
+    "sequence_order": [
+      "scenario_id",
+      "session_id",
+      "window_start"
+    ],
+    "raw_identifier_policy": "SrcAddr and DstAddr are used only for grouping and aggregation, never as model input features."
+  },
+  "label_mapping": {
+    "attack": [
+      "Botnet",
+      "C&C",
+      "-CC"
+    ],
+    "normal": [
+      "Normal"
+    ],
+    "background": [
+      "Background"
+    ]
+  },
+  "outputs": {
+    "smoke_common_csv": "data/processed/ctu13_common_10s_smoke.csv",
+    "full_common_csv": "data/processed/ctu13_common_10s_full.csv",
+    "conversion_report_json": "reports/ctu13_conversion_report.json",
+    "full_conversion_report_json": "reports/ctu13_conversion_full_report.json",
+    "conversion_report_md": "reports/ctu13_conversion_report.md",
+    "full_conversion_report_md": "reports/ctu13_conversion_full_report.md",
+    "data_sufficiency_json": "reports/data_sufficiency_ctu13_smoke.json",
+    "full_data_sufficiency_json": "reports/data_sufficiency_ctu13_full.json",
+    "gru_metrics_json": "reports/gru_metrics_ctu13_smoke.json",
+    "full_gru_metrics_json": "reports/gru_metrics_ctu13_full.json",
+    "pretraining_impact_json": "reports/ctu13_pretraining_impact_report.json"
+  },
+  "limitations": [
+    "CTU-13 is botnet/C2-centric cross-domain data.",
+    "CTU-13 metrics are useful for GRU sequence challenger development but must not be merged into IPCAM simulation operating-performance claims.",
+    "Background flows are excluded by default to avoid treating unlabeled background as clean normal during first-pass training."
+  ]
+}

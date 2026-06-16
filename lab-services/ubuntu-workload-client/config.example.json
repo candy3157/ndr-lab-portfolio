@@ -1,0 +1,115 @@
+{
+  "client_id": "ubuntu-client-01",
+  "interval_seconds": {
+    "min": 5,
+    "max": 15
+  },
+  "timeouts": {
+    "dns": 2,
+    "tcp": 3,
+    "http": 4,
+    "command": 8
+  },
+  "log_path": "logs/client-traffic.jsonl",
+  "dns": {
+    "enabled": true,
+    "hosts": [
+      "app.internal",
+      "files.internal",
+      "db.internal"
+    ]
+  },
+  "http": {
+    "enabled": true,
+    "base_urls": [
+      "http://app.internal"
+    ],
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/dashboard"
+      },
+      {
+        "method": "GET",
+        "path": "/api/users"
+      },
+      {
+        "method": "GET",
+        "path": "/api/orders"
+      },
+      {
+        "method": "GET",
+        "path": "/api/reports/daily"
+      },
+      {
+        "method": "POST",
+        "path": "/api/login",
+        "json": {
+          "username": "demo",
+          "password": "demo"
+        }
+      }
+    ]
+  },
+  "tcp": {
+    "enabled": true,
+    "targets": [
+      {
+        "name": "debian-ssh",
+        "host": "files.internal",
+        "port": 22
+      },
+      {
+        "name": "debian-smb",
+        "host": "files.internal",
+        "port": 445
+      },
+      {
+        "name": "app-http",
+        "host": "app.internal",
+        "port": 80
+      },
+      {
+        "name": "postgres",
+        "host": "db.internal",
+        "port": 5432
+      }
+    ]
+  },
+  "smb": {
+    "enabled": true,
+    "host": "files.internal",
+    "share": "shared",
+    "username": "demo",
+    "password": "demo",
+    "commands": [
+      "ls",
+      "get notice.txt /tmp/ndr-notice.txt"
+    ]
+  },
+  "database": {
+    "enabled": true,
+    "type": "postgres",
+    "host": "db.internal",
+    "port": 5432,
+    "database": "demoapp",
+    "username": "demo",
+    "password": "demo",
+    "queries": [
+      "select count(*) from users;",
+      "select count(*) from orders;",
+      "select now();"
+    ]
+  },
+  "weights": {
+    "dns": 2,
+    "http": 5,
+    "tcp": 2,
+    "smb": 2,
+    "database": 2
+  }
+}

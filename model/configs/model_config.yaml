@@ -1,0 +1,11 @@
+feature_schema_version: ndr_common_v1
+xgboost:
+  role: operating_candidate
+  model_path: models/xgboost_model.joblib
+  preprocessor_path: models/xgboost_preprocessor.joblib
+  feature_list_path: models/xgboost_feature_list.json
+gru:
+  role: sequence_challenger
+  model_path: models/gru_model.pt
+  scaler_path: models/gru_scaler.joblib
+  feature_list_path: models/gru_feature_list.json
