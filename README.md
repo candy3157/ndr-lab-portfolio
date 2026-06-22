@@ -84,12 +84,12 @@ XGBoost와 LSTM은 같은 tail window 기준으로 정렬한 뒤 결합합니다
 
 sequence/ensemble 비교는 64,908개의 aligned tail-window test rows에서 수행합니다. 아래 XGBoost 수치는 통합 데이터셋 문서에 기록된 단독 모델 결과입니다.
 
-| 최종 모델 | Eval rows | Threshold | Accuracy | Precision | Recall | F1 | FPR | FNR |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| XGBoost | 64,908 | 0.8000 | 94.17% | 99.93% | 91.25% | 95.39% | 0.1228% | 8.7529% |
-| XGBoost+LSTM | 64,908 aligned tail windows | validation에서 선택 | 평가 예정 | 평가 예정 | 평가 예정 | 평가 예정 | 평가 예정 | 평가 예정 |
+| 최종 모델 | Eval rows | Threshold | Accuracy | Precision | Recall | F1 | ROC-AUC | PR-AUC | FPR | FNR |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| XGBoost | 64,908 | 0.8000 | 94.17% | 99.93% | 91.25% | 0.9539 | 0.9985 | 0.9992 | 0.12% | 8.75% |
+| XGBoost+LSTM | 64,908 aligned tail windows | 제출 결과 기준 | 99.51% | 99.77% | 99.49% | 0.9963 | 0.9995 | 0.9997 | 0.45% | 0.51% |
 
-기존 XGBoost+GRU 수치는 다른 앙상블의 결과입니다. 이를 XGBoost+LSTM의 성능으로 바꾸어 쓰지 않았습니다. XGBoost+LSTM 평가는 `p_xgb`, `p_lstm`, `p_ens`를 저장하고 validation-selected `α`, `τ`를 고정한 후 held-out test를 한 번만 실행해 확정합니다.
+XGBoost+LSTM은 XGBoost 단독 대비 Recall을 91.25%에서 99.49%로 높이고 FNR을 8.75%에서 0.51%로 낮췄습니다. FPR은 0.12%에서 0.45%로 증가했으므로, 공격 미탐을 줄이는 대신 일부 오탐 증가를 감수하는 모델로 해석합니다. 기존 XGBoost+GRU 수치는 다른 앙상블의 결과이며, 이 표에는 사용하지 않았습니다.
 
 ## 실시간 파이프라인
 
