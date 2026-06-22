@@ -60,12 +60,12 @@ XGBoost+LSTM은 XGBoost의 빠른 tabular 판단과 LSTM의 시계열 문맥을 
 
 sequence/ensemble 비교는 동일한 64,908개 aligned tail-window test rows를 기준으로 합니다.
 
-| 최종 모델 | Accuracy | Precision | Recall | F1 | FPR | FNR |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| XGBoost | 94.17% | 99.93% | 91.25% | 95.39% | 0.1228% | 8.7529% |
-| XGBoost+LSTM | validation 확정 후 평가 | validation 확정 후 평가 | validation 확정 후 평가 | validation 확정 후 평가 | validation 확정 후 평가 | validation 확정 후 평가 |
+| 최종 모델 | Accuracy | Precision | Recall | F1 | ROC-AUC | PR-AUC | FPR | FNR |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| XGBoost | 94.17% | 99.93% | 91.25% | 0.9539 | 0.9985 | 0.9992 | 0.12% | 8.75% |
+| XGBoost+LSTM | 99.51% | 99.77% | 99.49% | 0.9963 | 0.9995 | 0.9997 | 0.45% | 0.51% |
 
-XGBoost+LSTM의 가중치와 threshold를 test set에 맞춰 고르는 것은 성능 과대평가를 만들 수 있습니다. 따라서 validation에서 `α`, `τ`를 선택하고 그 값을 고정한 뒤 held-out test에 단 한 번 적용해 최종 수치를 산출합니다. 기존 Notion의 XGBoost+GRU 결과는 다른 모델이므로 XGBoost+LSTM 행에 재사용하지 않았습니다.
+XGBoost+LSTM은 Recall을 **91.25% → 99.49%**, F1을 **0.9539 → 0.9963**으로 높이고 FNR을 **8.75% → 0.51%**로 낮췄습니다. 반면 FPR은 **0.12% → 0.45%**로 증가했습니다. 따라서 이 앙상블은 약간의 오탐 증가를 감수하고 공격 미탐을 줄이는 방향의 모델입니다. 기존 Notion의 XGBoost+GRU 결과는 다른 모델이므로 이 표에 사용하지 않았습니다.
 
 ## 내가 담당한 일
 
